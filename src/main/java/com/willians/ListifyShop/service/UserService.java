@@ -52,6 +52,19 @@ public class UserService {
         return ResponseEntity.ok(usersResponse);
     }
 
+    public ResponseEntity<UserResponseDto> updateUser(UserRequestDto userRequest){
+        User user = this.userRepository.findById(userRequest.id()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado!"));
+
+        user.setCpf(userRequest.cpf());
+        user.setEmail(user.getEmail());
+        user.setName(userRequest.name());
+        user.setPassword(userRequest.password());
+
+        this.userRepository.save(user);
+
+        return  ResponseEntity.ok(convertUserToResponseDto(user));
+    }
+
     public User convertRequestDtoToUser(UserRequestDto userResquest){
         return new User(
                 userResquest.name(),
