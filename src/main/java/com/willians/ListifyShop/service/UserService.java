@@ -31,6 +31,12 @@ public class UserService {
         return ResponseEntity.ok(convertUserToResponseDto(user));
     }
 
+    public ResponseEntity<UserResponseDto> findUserByEmail(String email){
+        User user = this.userRepository.findByEmail(email).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+
+        return ResponseEntity.ok(convertUserToResponseDto(user));
+    }
+
     public ResponseEntity<List<UserResponseDto>> findAllUser(){
         List<User> users = this.userRepository.findAll();
         List<UserResponseDto> usersResponse = users.stream().map(this::convertUserToResponseDto).toList();
