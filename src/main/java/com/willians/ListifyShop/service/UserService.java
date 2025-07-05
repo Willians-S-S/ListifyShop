@@ -20,7 +20,7 @@ public class UserService {
 
     public UserResponseDto addUser(UserRequestDto userRequest){
         this.userRepository.findByEmail(userRequest.email()).ifPresent(e -> {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email já utilizado!");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email já utilizado.");
         });
 
         this.userRepository.findByCpf(userRequest.cpf()).ifPresent(e -> {
@@ -33,13 +33,13 @@ public class UserService {
     }
 
     public ResponseEntity<UserResponseDto> findUserById(UUID id){
-        User user = this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        User user = this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
 
         return ResponseEntity.ok(convertUserToResponseDto(user));
     }
 
     public ResponseEntity<UserResponseDto> findUserByEmail(String email){
-        User user = this.userRepository.findByEmail(email).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        User user = this.userRepository.findByEmail(email).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
 
         return ResponseEntity.ok(convertUserToResponseDto(user));
     }
@@ -51,7 +51,7 @@ public class UserService {
     }
 
     public ResponseEntity<UserResponseDto> updateUser(UserRequestDto userRequest){
-        User user = this.userRepository.findById(userRequest.id()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado!"));
+        User user = this.userRepository.findById(userRequest.id()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
 
         user.setCpf(userRequest.cpf());
         user.setEmail(userRequest.email());
@@ -61,6 +61,13 @@ public class UserService {
         this.userRepository.save(user);
 
         return  ResponseEntity.ok(convertUserToResponseDto(user));
+    }
+
+    public ResponseEntity<String> deleteUser(UUID id){
+        User user = this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
+        this.userRepository.delete(user);
+
+        return ResponseEntity.ok("Usuário deletado com sucesso.");
     }
 
     public User convertRequestDtoToUser(UserRequestDto userResquest){

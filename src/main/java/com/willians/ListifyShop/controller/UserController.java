@@ -41,4 +41,9 @@ public class UserController {
     public ResponseEntity<UserResponseDto> updateUser(@RequestBody UserRequestDto userRequest){
         return this.userService.updateUser(userRequest);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable UUID id){
+        return this.userService.deleteUser(id);
+    }
 }
