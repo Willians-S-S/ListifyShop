@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @Service
 public class UserService {
@@ -20,6 +21,14 @@ public class UserService {
     private UserRepository userRepository;
 
     public UserResponseDto addUser(UserRequestDto userRequest){
+        this.userRepository.findByEmail(userRequest.email()).ifPresent(e -> {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email já utilizado!");
+        });
+
+        this.userRepository.findByCpf(userRequest.cpf()).ifPresent(e -> {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Cpf já utilizado.");
+        });
+
         User user = convertRequestDtoToUser(userRequest);
         user = this.userRepository.save(user);
         return convertUserToResponseDto(user);
