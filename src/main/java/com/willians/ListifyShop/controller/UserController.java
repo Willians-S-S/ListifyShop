@@ -36,4 +36,9 @@ public class UserController {
     public ResponseEntity<List<UserResponseDto>> findAllUsers(){
         return this.userService.findAllUser();
     }
+
+    @PutMapping
+    public ResponseEntity<UserResponseDto> updateUser(@RequestBody UserRequestDto userRequest){
+        return this.userService.updateUser(userRequest);
+    }
 }

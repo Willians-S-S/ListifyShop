@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 @Service
 public class UserService {
@@ -56,7 +54,7 @@ public class UserService {
         User user = this.userRepository.findById(userRequest.id()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado!"));
 
         user.setCpf(userRequest.cpf());
-        user.setEmail(user.getEmail());
+        user.setEmail(userRequest.email());
         user.setName(userRequest.name());
         user.setPassword(userRequest.password());
 
