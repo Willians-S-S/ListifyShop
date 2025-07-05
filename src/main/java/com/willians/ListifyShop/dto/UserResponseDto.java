@@ -1,4 +1,6 @@
 package com.willians.ListifyShop.dto;
 
-public record UserDto() {
+import java.util.UUID;
+
+public record UserResponseDto(UUID id, String name, String cpf, String email) {
 }

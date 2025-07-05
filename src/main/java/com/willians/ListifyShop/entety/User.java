@@ -1,19 +1,18 @@
 package com.willians.ListifyShop.entety;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user_table")
 public class User {
 
     @Id
-    @Column(nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.UUID)
+//    @Column(nullable = false, unique = true)
     private UUID id;
     @Column(nullable = false)
     private String name;
@@ -24,8 +23,11 @@ public class User {
     @Column(nullable = false, unique = true)
     private String password;
 
-    public User(UUID id, String name, String cpf, String email, String password) {
-        this.id = id;
+    public User() {
+    }
+
+    public User(String name, String cpf, String email, String password) {
+//        this.id = id;
         this.name = name;
         this.cpf = cpf;
         this.email = email;
