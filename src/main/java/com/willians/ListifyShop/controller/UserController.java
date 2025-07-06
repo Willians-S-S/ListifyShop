@@ -2,6 +2,7 @@ package com.willians.ListifyShop.controller;
 
 import com.willians.ListifyShop.dto.UserRequestDto;
 import com.willians.ListifyShop.dto.UserResponseDto;
+import com.willians.ListifyShop.dto.UserUpdate;
 import com.willians.ListifyShop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +39,8 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserResponseDto> updateUser(@RequestBody UserRequestDto userRequest){
-        return this.userService.updateUser(userRequest);
+    public ResponseEntity<UserResponseDto> updateUser(@RequestBody UserUpdate userUpdate){
+        return this.userService.updateUser(userUpdate);
     }
 
     @DeleteMapping("/{id}")
