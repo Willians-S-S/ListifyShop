@@ -65,7 +65,7 @@ public class UserService {
 
         this.userRepository.save(user);
 
-        return  ResponseEntity.ok(convertUserToResponseDto(user));
+        return  ResponseEntity.ok(mapper.userToResponse(user));
     }
 
     public ResponseEntity<String> deleteUser(UUID id){
