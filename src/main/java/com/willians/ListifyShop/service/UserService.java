@@ -5,6 +5,7 @@ import com.willians.ListifyShop.dto.UserResponseDto;
 import com.willians.ListifyShop.dto.UserUpdate;
 import com.willians.ListifyShop.entety.User;
 import com.willians.ListifyShop.mapstruct.UserMapper;
+import com.willians.ListifyShop.mapstruct.UserUpdateMapper;
 import com.willians.ListifyShop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,9 @@ public class UserService {
 
     @Autowired
     private UserMapper mapper;
+
+    @Autowired
+    private UserUpdateMapper userUpdateMapper;
 
     public UserResponseDto addUser(UserRequestDto userRequest){
         this.userRepository.findByEmail(userRequest.email()).ifPresent(e -> {
@@ -58,11 +62,12 @@ public class UserService {
     public ResponseEntity<UserResponseDto> updateUser(UserUpdate userUpdate){
         User user = this.userRepository.findById(userUpdate.id()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
 
-        user.setCpf(userUpdate.cpf());
-        user.setEmail(userUpdate.email());
-        user.setName(userUpdate.name());
-        user.setPassword(userUpdate.password());
+//        user.setCpf(userUpdate.cpf());
+//        user.setEmail(userUpdate.email());
+//        user.setName(userUpdate.name());
+//        user.setPassword(userUpdate.password());
 
+        userUpdateMapper.userUpdateToUser(userUpdate, user);
         this.userRepository.save(user);
 
         return  ResponseEntity.ok(mapper.userToResponse(user));
