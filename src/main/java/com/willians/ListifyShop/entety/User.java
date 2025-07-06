@@ -20,7 +20,7 @@ public class User {
     private String cpf;
     @Column(nullable = false, unique = true)
     private String email;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String password;
 
     public User() {
