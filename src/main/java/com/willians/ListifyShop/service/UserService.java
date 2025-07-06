@@ -3,6 +3,7 @@ package com.willians.ListifyShop.service;
 import com.willians.ListifyShop.dto.UserRequestDto;
 import com.willians.ListifyShop.dto.UserResponseDto;
 import com.willians.ListifyShop.entety.User;
+import com.willians.ListifyShop.mapstruct.UserMapper;
 import com.willians.ListifyShop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserMapper mapper;
+
     public UserResponseDto addUser(UserRequestDto userRequest){
         this.userRepository.findByEmail(userRequest.email()).ifPresent(e -> {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email já utilizado.");
@@ -27,9 +31,10 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Cpf já utilizado.");
         });
 
-        User user = convertRequestDtoToUser(userRequest);
+//        User user = convertRequestDtoToUser(userRequest);
+        User user = mapper.requestToUser(userRequest);
         user = this.userRepository.save(user);
-        return convertUserToResponseDto(user);
+        return mapper.userToResponse(user);
     }
 
     public ResponseEntity<UserResponseDto> findUserById(UUID id){
