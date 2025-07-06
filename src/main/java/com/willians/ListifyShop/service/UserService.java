@@ -32,7 +32,6 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Cpf já utilizado.");
         });
 
-//        User user = convertRequestDtoToUser(userRequest);
         User user = mapper.requestToUser(userRequest);
         user = this.userRepository.save(user);
         return mapper.userToResponse(user);
@@ -41,18 +40,18 @@ public class UserService {
     public ResponseEntity<UserResponseDto> findUserById(UUID id){
         User user = this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
 
-        return ResponseEntity.ok(convertUserToResponseDto(user));
+        return ResponseEntity.ok(mapper.userToResponse(user));
     }
 
     public ResponseEntity<UserResponseDto> findUserByEmail(String email){
         User user = this.userRepository.findByEmail(email).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
 
-        return ResponseEntity.ok(convertUserToResponseDto(user));
+        return ResponseEntity.ok(mapper.userToResponse(user));
     }
 
     public ResponseEntity<List<UserResponseDto>> findAllUser(){
         List<User> users = this.userRepository.findAll();
-        List<UserResponseDto> usersResponse = users.stream().map(this::convertUserToResponseDto).toList();
+        List<UserResponseDto> usersResponse = mapper.listUserToResponse(users);
         return ResponseEntity.ok(usersResponse);
     }
 
