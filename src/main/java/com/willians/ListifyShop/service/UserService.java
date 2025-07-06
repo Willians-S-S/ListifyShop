@@ -2,6 +2,7 @@ package com.willians.ListifyShop.service;
 
 import com.willians.ListifyShop.dto.UserRequestDto;
 import com.willians.ListifyShop.dto.UserResponseDto;
+import com.willians.ListifyShop.dto.UserUpdate;
 import com.willians.ListifyShop.entety.User;
 import com.willians.ListifyShop.mapstruct.UserMapper;
 import com.willians.ListifyShop.repository.UserRepository;
@@ -55,13 +56,13 @@ public class UserService {
         return ResponseEntity.ok(usersResponse);
     }
 
-    public ResponseEntity<UserResponseDto> updateUser(UserRequestDto userRequest){
-        User user = this.userRepository.findById(userRequest.id()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
+    public ResponseEntity<UserResponseDto> updateUser(UserUpdate userUpdate){
+        User user = this.userRepository.findById(userUpdate.id()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
 
-        user.setCpf(userRequest.cpf());
-        user.setEmail(userRequest.email());
-        user.setName(userRequest.name());
-        user.setPassword(userRequest.password());
+        user.setCpf(userUpdate.cpf());
+        user.setEmail(userUpdate.email());
+        user.setName(userUpdate.name());
+        user.setPassword(userUpdate.password());
 
         this.userRepository.save(user);
 
