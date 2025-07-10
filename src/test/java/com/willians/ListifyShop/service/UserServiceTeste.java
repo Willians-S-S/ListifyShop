@@ -13,9 +13,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,8 +42,8 @@ public class UserServiceTeste {
         user = new User();
         userResponse = new UserResponseDto(UUID.randomUUID(), "nome", "cpf", "email");
 
-        when(userMapper.requestToUser(userRequest)).thenReturn(user);
-        when(userMapper.userToResponse(user)).thenReturn(userResponse);
+        lenient().when(userMapper.requestToUser(userRequest)).thenReturn(user);
+        lenient().when(userMapper.userToResponse(user)).thenReturn(userResponse);
     }
 
     @Test
@@ -51,6 +54,25 @@ public class UserServiceTeste {
 
         Assertions.assertEquals(userResponse, userReturn);
         verify(userRepository).save(user);
+    }
+
+    @Test
+    void naoDeveAdicionarUsuarioQuandoEmailJaExiste(){
+        // 1. Arrange: Mock do repositório para retornar um usuário existente
+        Mockito.when(userRepository.findByEmail(userRequest.email())).thenReturn(Optional.of(user));
+
+        // 2. Act & Assert: Chamar o método do serviço e verificar a exceção
+        ResponseStatusException e = Assertions.assertThrows(ResponseStatusException.class, () -> {
+            userService.addUser(userRequest);
+        });
+
+        // 3. Assert: Verificar a mensagem da exceção usando AssertJ
+        assertThat(e.getMessage()).isEqualTo("409 CONFLICT \"Email já utilizado.\"");
+
+        // Verificar que 'save' NUNCA foi chamado
+        Mockito.verify(userRepository, Mockito.never()).save(Mockito.any(User.class));
+        // Verificar que findByEmail foi chamado
+        Mockito.verify(userRepository).findByEmail(userRequest.email());
     }
 
 
