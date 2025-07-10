@@ -75,5 +75,19 @@ public class UserServiceTeste {
         Mockito.verify(userRepository).findByEmail(userRequest.email());
     }
 
+    @Test
+    void naoDeveAdicionarUsuarioQuandoCpfJaExiste(){
+        // 1. Arrange
+        when(userRepository.findByCpf(userRequest.cpf())).thenReturn(Optional.of(user));
 
+        // 2. Act & Assert:
+        ResponseStatusException e = Assertions.assertThrows(ResponseStatusException.class, () -> {
+            userService.addUser(userRequest);
+        });
+
+        // 3. Assert:
+        assertThat(e.getMessage()).isEqualTo("409 CONFLICT \"Cpf já utilizado.\"");
+        verify(userRepository, Mockito.never()).save(Mockito.any(User.class));
+        verify(userRepository).findByCpf(userRequest.cpf());
+    }
 }
