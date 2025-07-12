@@ -1,5 +1,6 @@
 package com.willians.ListifyShop.entety;
 
+import com.willians.ListifyShop.validation.CpfValid;
 import jakarta.persistence.*;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 

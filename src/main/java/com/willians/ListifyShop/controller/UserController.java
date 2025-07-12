@@ -4,6 +4,7 @@ import com.willians.ListifyShop.dto.UserRequestDto;
 import com.willians.ListifyShop.dto.UserResponseDto;
 import com.willians.ListifyShop.dto.UserUpdate;
 import com.willians.ListifyShop.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public UserResponseDto addUser(@RequestBody UserRequestDto userRequest){
+    public UserResponseDto addUser(@Valid @RequestBody UserRequestDto userRequest){
         return this.userService.addUser(userRequest);
     }
 
