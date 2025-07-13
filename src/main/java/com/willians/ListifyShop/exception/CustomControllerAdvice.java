@@ -3,6 +3,7 @@ package com.willians.ListifyShop.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,5 +40,21 @@ public class CustomControllerAdvice {
                     e.getMessage(),
                     request.getRequestURI()
                     ));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationError> anotationError(MethodArgumentNotValidException e, HttpServletRequest request){
+        int cod = HttpStatus.UNPROCESSABLE_ENTITY.value();
+        ValidationError error = new ValidationError(
+                Instant.now(),
+                cod,
+                "Validation exception",
+                e.getMessage(),
+                request.getRequestURI()
+        );
+
+        e.getBindingResult().getFieldErrors().stream().forEach(field -> error.addError(field.getField(), field.getDefaultMessage()));
+
+        return ResponseEntity.status(cod).body(error);
     }
 }
