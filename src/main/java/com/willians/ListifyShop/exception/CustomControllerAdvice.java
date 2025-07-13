@@ -1,15 +1,13 @@
 package com.willians.ListifyShop.exception;
 
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
-import java.util.Timer;
 
 @ControllerAdvice
 public class CustomControllerAdvice {
@@ -28,5 +26,18 @@ public class CustomControllerAdvice {
                         message,
                         request.getRequestURI()
                         ));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<MessageError> notFoundExceptionResponseEntity(NotFoundException e, HttpServletRequest request){
+        int cod = HttpStatus.NOT_FOUND.value();
+        return ResponseEntity.status(cod).body(
+                new MessageError(
+                    Instant.now(),
+                    cod,
+                    "Recurso não encontrado",
+                    e.getMessage(),
+                    request.getRequestURI()
+                    ));
     }
 }

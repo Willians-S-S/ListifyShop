@@ -4,6 +4,7 @@ import com.willians.ListifyShop.dto.UserRequestDto;
 import com.willians.ListifyShop.dto.UserResponseDto;
 import com.willians.ListifyShop.dto.UserUpdate;
 import com.willians.ListifyShop.entety.User;
+import com.willians.ListifyShop.exception.NotFoundException;
 import com.willians.ListifyShop.mapstruct.UserMapper;
 import com.willians.ListifyShop.mapstruct.UserUpdateMapper;
 import com.willians.ListifyShop.repository.UserRepository;
@@ -42,13 +43,13 @@ public class UserService {
     }
 
     public ResponseEntity<UserResponseDto> findUserById(UUID id){
-        User user = this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
+        User user = this.userRepository.findById(id).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 
         return ResponseEntity.ok(mapper.userToResponse(user));
     }
 
     public ResponseEntity<UserResponseDto> findUserByEmail(String email){
-        User user = this.userRepository.findByEmail(email).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
+        User user = this.userRepository.findByEmail(email).orElseThrow(()-> new NotFoundException("Usuário não encontrado."));
 
         return ResponseEntity.ok(mapper.userToResponse(user));
     }
