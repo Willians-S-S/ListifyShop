@@ -8,10 +8,12 @@ import com.willians.ListifyShop.exception.NotFoundException;
 import com.willians.ListifyShop.mapstruct.UserMapper;
 import com.willians.ListifyShop.mapstruct.UserUpdateMapper;
 import com.willians.ListifyShop.repository.UserRepository;
+import com.willians.ListifyShop.utils.ImageOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -28,7 +30,7 @@ public class UserService {
     @Autowired
     private UserUpdateMapper userUpdateMapper;
 
-    public UserResponseDto addUser(UserRequestDto userRequest){
+    public UserResponseDto addUser(UserRequestDto userRequest, MultipartFile image){
         this.userRepository.findByEmail(userRequest.email()).ifPresent(e -> {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email já utilizado.");
         });
@@ -38,6 +40,12 @@ public class UserService {
         });
 
         User user = mapper.requestToUser(userRequest);
+
+        if(image != null){
+            ImageOperator imageOperator = new ImageOperator();
+            String nameImg = imageOperator.saveImg(image);
+            user.setUrlImage(nameImg);
+        }
         user = this.userRepository.save(user);
         return mapper.userToResponse(user);
     }
@@ -63,11 +71,6 @@ public class UserService {
     public ResponseEntity<UserResponseDto> updateUser(UserUpdate userUpdate){
         User user = this.userRepository.findById(userUpdate.id()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
 
-//        user.setCpf(userUpdate.cpf());
-//        user.setEmail(userUpdate.email());
-//        user.setName(userUpdate.name());
-//        user.setPassword(userUpdate.password());
-
         userUpdateMapper.userUpdateToUser(userUpdate, user);
         this.userRepository.save(user);
 
@@ -79,21 +82,5 @@ public class UserService {
         this.userRepository.delete(user);
 
         return ResponseEntity.ok("Usuário deletado com sucesso.");
-    }
-
-    public User convertRequestDtoToUser(UserRequestDto userResquest){
-        return new User(
-                userResquest.name(),
-                userResquest.cpf(),
-                userResquest.email(),
-                userResquest.password());
-    }
-
-    public UserResponseDto convertUserToResponseDto(User user){
-        return new UserResponseDto(
-                user.getId(),
-                user.getName(),
-                user.getCpf(),
-                user.getEmail());
     }
 }
