@@ -12,6 +12,7 @@ import java.util.List;
 public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     User requestToUser(UserRequestDto request);
+    @Mapping(source = "urlImage", target = "urlImage")
     UserResponseDto userToResponse(User user);
     List<UserResponseDto> listUserToResponse(List<User> listUser);
 
