@@ -27,4 +27,21 @@ public class ImageOperator {
             throw new RuntimeException(e);
         }
     }
+
+    public ResponseEntity<UrlResource> getImg(String nameImg){
+        try {
+            Path img = Paths.get(this.path).resolve(nameImg);
+            UrlResource resource = new UrlResource(img.toUri());
+            if(resource.exists()){
+                return ResponseEntity
+                        .ok()
+                        .contentType(MediaType.IMAGE_PNG)
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
