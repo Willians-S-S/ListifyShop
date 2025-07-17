@@ -6,8 +6,10 @@ import com.willians.ListifyShop.dto.UserUpdate;
 import com.willians.ListifyShop.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,9 +21,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    public UserResponseDto addUser(@Valid @RequestBody UserRequestDto userRequest){
-        return this.userService.addUser(userRequest);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public UserResponseDto addUser(
+            @Valid @RequestPart("user") UserRequestDto userRequest,
+            @RequestPart(value = "image", required = false) MultipartFile image
+    ){
+        return this.userService.addUser(userRequest, image);
     }
 
     @GetMapping("/{id}")
