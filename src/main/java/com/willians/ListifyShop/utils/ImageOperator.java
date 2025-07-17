@@ -5,8 +5,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -43,5 +45,16 @@ public class ImageOperator {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public ResponseEntity<Void> deleteImg(String nameImg){
+         try {
+             Path imgPath = Paths.get(this.path).resolve(nameImg);
+             Files.deleteIfExists(imgPath);
+
+             return  ResponseEntity.ok().build();
+         } catch (IOException e) {
+             throw new RuntimeException(e);
+         }
     }
 }
