@@ -5,7 +5,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -19,7 +18,6 @@ public class ImageOperator {
 
      public String saveImg(MultipartFile image){
          try {
-             System.out.println(image.getOriginalFilename());
              if (!image.getOriginalFilename().endsWith(".png") && !image.getOriginalFilename().endsWith(".jpg")){
                  throw new RuntimeException("O arquivo enviado não é uma imagem png ou jpg");
              }
