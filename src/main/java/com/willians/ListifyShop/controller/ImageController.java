@@ -14,4 +14,10 @@ public class ImageController {
         ImageOperator imageOperator = new ImageOperator();
         return imageOperator.getImg(image);
     }
+
+    @DeleteMapping(value = "/{image}")
+    public ResponseEntity<Void> deleteImg(@PathVariable String image){
+        ImageOperator imageOperator = new ImageOperator();
+        return imageOperator.deleteImg(image);
+    }
 }
