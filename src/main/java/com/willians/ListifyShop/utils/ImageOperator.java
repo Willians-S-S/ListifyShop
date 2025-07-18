@@ -19,6 +19,10 @@ public class ImageOperator {
 
      public String saveImg(MultipartFile image){
          try {
+             System.out.println(image.getOriginalFilename());
+             if (!image.getOriginalFilename().endsWith(".png") && !image.getOriginalFilename().endsWith(".jpg")){
+                 throw new RuntimeException("O arquivo enviado não é uma imagem png ou jpg");
+             }
              String fileName = UUID.randomUUID() + image.getOriginalFilename();
              Path uploadPath = Paths.get(path);
              Path saveLocal = uploadPath.resolve(fileName);
