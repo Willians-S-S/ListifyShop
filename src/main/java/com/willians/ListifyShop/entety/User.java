@@ -4,6 +4,8 @@ import com.willians.ListifyShop.validation.CpfValid;
 import jakarta.persistence.*;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -26,15 +28,23 @@ public class User {
     @Column(nullable = true)
     private String urlImage;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name="users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name="role_id"))
+    private List<Role> roles = new ArrayList<>();;
+
+
     public User() {
     }
 
-    public User(String name, String cpf, String email, String password) {
+    public User(String name, String cpf, String email, String password, List<Role> roles) {
 //        this.id = id;
         this.name = name;
         this.cpf = cpf;
         this.email = email;
         this.password = password;
+        this.roles = roles;
     }
 
     public UUID getId() {
@@ -83,6 +93,14 @@ public class User {
 
     public void setUrlImage(String urlImage) {
         this.urlImage = urlImage;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
