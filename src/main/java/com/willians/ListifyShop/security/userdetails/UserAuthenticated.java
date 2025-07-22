@@ -34,7 +34,7 @@ public class UserAuthenticated implements UserDetails {
                 .collect(Collectors.toList());
     }
 
-    public UUID getId(){
+    public String getId(){
         return user.getId();
     }
 

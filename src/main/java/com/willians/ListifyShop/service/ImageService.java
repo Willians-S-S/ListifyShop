@@ -22,7 +22,7 @@ public class ImageService {
     private UserMapper userMapper;
     private ImageOperator imageOperator = new ImageOperator();
 
-    public ResponseEntity<UserResponseDto> saveImgUser(UUID idUser, MultipartFile image){
+    public ResponseEntity<UserResponseDto> saveImgUser(String idUser, MultipartFile image){
         User user = userRepository.findById(idUser)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 

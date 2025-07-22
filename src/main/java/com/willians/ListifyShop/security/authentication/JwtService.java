@@ -29,10 +29,10 @@ public class JwtService {
                 .stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
 
-        UUID userId = null;
+        String userId = null;
         if (authentication.getPrincipal() instanceof UserAuthenticated) {
             UserAuthenticated user = (UserAuthenticated) authentication.getPrincipal();
-            userId = user.getId();
+            userId = user.getId().toString();
         }
 
 //        var claims = JwtClaimsSet.builder()

@@ -12,23 +12,23 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private String id;
 
     @Enumerated(EnumType.STRING)
     private RoleName name;
 
     public Role() {}
 
-    public Role(UUID id, RoleName name) {
+    public Role(String id, RoleName name) {
         this.id = id;
         this.name = name;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

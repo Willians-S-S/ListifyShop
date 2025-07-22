@@ -66,7 +66,7 @@ public class UserService {
         return mapper.userToResponse(user);
     }
 
-    public ResponseEntity<UserResponseDto> findUserById(UUID id){
+    public ResponseEntity<UserResponseDto> findUserById(String id){
         User user = this.userRepository.findById(id).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 
         return ResponseEntity.ok(mapper.userToResponse(user));
@@ -84,7 +84,7 @@ public class UserService {
         return ResponseEntity.ok(usersResponse);
     }
 
-    public ResponseEntity<UserResponseDto> updateUser(UUID id, UserUpdate userUpdate){
+    public ResponseEntity<UserResponseDto> updateUser(String id, UserUpdate userUpdate){
         User user = this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
 
         userUpdateMapper.userUpdateToUser(userUpdate, user);
@@ -93,7 +93,7 @@ public class UserService {
         return  ResponseEntity.ok(mapper.userToResponse(user));
     }
 
-    public ResponseEntity<String> deleteUser(UUID id){
+    public ResponseEntity<String> deleteUser(String id){
         User user = this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
         this.userRepository.delete(user);
 
