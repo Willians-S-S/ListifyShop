@@ -19,7 +19,7 @@ public class ImageController {
     private ImageService imageService;
 
     @PostMapping(value = "/{idUser}")
-    public ResponseEntity<UserResponseDto> saveImgUser(@PathVariable UUID idUser, @RequestPart("image") MultipartFile image){
+    public ResponseEntity<UserResponseDto> saveImgUser(@PathVariable String idUser, @RequestPart("image") MultipartFile image){
         return imageService.saveImgUser(idUser, image);
     }
 
