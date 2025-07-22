@@ -1,7 +1,6 @@
 package com.willians.ListifyShop.security.authentication;
 
-import com.willians.ListifyShop.entety.User;
-import com.willians.ListifyShop.security.userdetails.UserAuthenticated;
+import com.willians.ListifyShop.security.userdetails.UserDetailsImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -10,7 +9,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,42 +20,29 @@ public class JwtService {
     }
 
     public String genereteToken(Authentication authentication){
-        Instant now = Instant.now();
-        long expire = 3600L;
+        try {
+            Instant now = Instant.now();
+            long expire = 3600L;
 
-        String scopes = authentication.getAuthorities()
-                .stream().map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(" "));
+            String scopes = authentication.getAuthorities()
+                    .stream().map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.joining(" "));
 
-        String userId = null;
-        if (authentication.getPrincipal() instanceof UserAuthenticated) {
-            UserAuthenticated user = (UserAuthenticated) authentication.getPrincipal();
-            userId = user.getId().toString();
+            JwtClaimsSet.Builder claimsBuilder = JwtClaimsSet.builder()
+                    .issuer("listify-shop")
+                    .issuedAt(now)
+                    .expiresAt(now.plusSeconds(expire))
+                    .subject(authentication.getName())
+                    .claim("scope", scopes);
+
+            claimsBuilder.claim("id", ((UserDetailsImpl) authentication.getPrincipal()).getId());
+
+            JwtClaimsSet claims = claimsBuilder.build();
+
+            return encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+        } catch (Exception e) {
+            throw new RuntimeException("Não foi possível autenticar o usuário.");
         }
-
-//        var claims = JwtClaimsSet.builder()
-//                .issuer("spring-security-jwt")
-//                .issuedAt(now)
-//                .expiresAt(now.plusSeconds(expire))
-//                .subject(authentication.getName())
-//                .claim("scope", scopes)
-//                .build();
-
-        JwtClaimsSet.Builder claimsBuilder = JwtClaimsSet.builder()
-                .issuer("spring-security-jwt")
-                .issuedAt(now)
-                .expiresAt(now.plusSeconds(expire))
-                .subject(authentication.getName())
-                .claim("scope", scopes); // Adicione o escopo aqui também
-
-        // Adicione a claim "userId" ao builder ANTES de chamar .build()
-        if (userId != null) {
-            claimsBuilder.claim("id", userId);
-        }
-
-        var claims = claimsBuilder.build();
-
-        return encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
 }
