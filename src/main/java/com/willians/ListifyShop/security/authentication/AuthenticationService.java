@@ -17,7 +17,7 @@ public class AuthenticationService {
         this.jwtService = jwtService;
     }
 
-    public String autheticate(Authentication authentication){
+    public String authenticate(Authentication authentication){
         return jwtService.genereteToken(authentication);
     }
 }
