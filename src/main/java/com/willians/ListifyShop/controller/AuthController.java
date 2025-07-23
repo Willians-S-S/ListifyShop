@@ -23,7 +23,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String authenticate(Authentication authentication){
-        return authenticationService.autheticate(authentication);
+        return authenticationService.authenticate(authentication);
     }
 
 
