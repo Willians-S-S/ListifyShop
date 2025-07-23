@@ -28,14 +28,12 @@ public class ImageController {
     @GetMapping(value = "{userId}/{image}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN') or #userId.equals(authentication.principal.claims['id'])")
     public ResponseEntity<UrlResource> getImage(@PathVariable String userId, @PathVariable String image){
-        ImageOperator imageOperator = new ImageOperator();
-        return imageOperator.getImg(image);
+        return imageService.getImage(userId, image);
     }
 
     @DeleteMapping(value = "{userId}/{image}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN') or #userId.equals(authentication.principal.claims['id'])")
     public ResponseEntity<Void> deleteImg(@PathVariable String userId, @PathVariable String image){
-
         return imageService.deleteImg(userId, image);
     }
 }
