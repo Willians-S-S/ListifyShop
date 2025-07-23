@@ -86,7 +86,6 @@ public class UserService {
 
     public ResponseEntity<UserResponseDto> updateUser(String id, UserUpdate userUpdate){
         User user = this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
-
         userUpdateMapper.userUpdateToUser(userUpdate, user);
         this.userRepository.save(user);
 
