@@ -2,6 +2,7 @@ package com.willians.ListifyShop.dto;
 
 import com.willians.ListifyShop.entety.Role;
 
+import java.time.Instant;
 import java.util.List;
 
 public record UserResponseDto(String id,
@@ -9,5 +10,9 @@ public record UserResponseDto(String id,
                               String cpf,
                               String email,
                               String urlImage,
-                              List<Role> roles) {
+                              Instant creatAt,
+                              Instant updateAt,
+                              List<Role> roles
+
+) {
 }
