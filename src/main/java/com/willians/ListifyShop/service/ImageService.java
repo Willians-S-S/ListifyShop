@@ -29,7 +29,6 @@ public class ImageService {
             throw new RuntimeException("Erro! Arquivo vázio.");
         }
         String nameImg = imageOperator.saveImg(image);
-
         user.setUrlImage(nameImg);
         user = userRepository.save(user);
 
