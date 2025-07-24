@@ -10,7 +10,6 @@ import com.willians.ListifyShop.exception.NotFoundException;
 import com.willians.ListifyShop.mapstruct.UserMapper;
 import com.willians.ListifyShop.mapstruct.UserUpdateMapper;
 import com.willians.ListifyShop.repository.UserRepository;
-import com.willians.ListifyShop.security.config.SecurityConfig;
 import com.willians.ListifyShop.utils.ImageOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class UserService {
@@ -50,11 +49,8 @@ public class UserService {
         });
 
         User user = mapper.requestToUser(userRequest);
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         Role role = roleService.findByName(RoleName.USER);
-
         user.getRoles().add(role);
 
         if(image != null){
@@ -62,6 +58,11 @@ public class UserService {
             String nameImg = imageOperator.saveImg(image);
             user.setUrlImage(nameImg);
         }
+
+        Instant date = Instant.now();
+        user.setCreatAt(date);
+        user.setUpdateAt(date);
+
         user = this.userRepository.save(user);
         return mapper.userToResponse(user);
     }
@@ -87,6 +88,7 @@ public class UserService {
     public ResponseEntity<UserResponseDto> updateUser(String id, UserUpdate userUpdate){
         User user = this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
         userUpdateMapper.userUpdateToUser(userUpdate, user);
+        user.setUpdateAt(Instant.now());
         this.userRepository.save(user);
 
         return  ResponseEntity.ok(mapper.userToResponse(user));
