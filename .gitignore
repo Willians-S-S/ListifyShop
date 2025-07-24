@@ -35,3 +35,5 @@ build/
 
 *.key
 *.pub
+
+esquema_db.png
