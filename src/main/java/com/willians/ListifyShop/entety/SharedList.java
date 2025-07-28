@@ -15,17 +15,22 @@ import lombok.*;
 public class SharedList {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @Enumerated(value = EnumType.STRING)
     private PermissionLevel permission;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "user", nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private String shareToken;
+
+    @Column(nullable = false)
+    private Boolean activeSharing;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "owner", nullable = false)
+    private User owner;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "shoppingList", nullable = false)
     private ShoppingList shoppingList;
 }
