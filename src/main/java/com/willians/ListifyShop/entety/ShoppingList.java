@@ -24,13 +24,13 @@ public class ShoppingList {
     @Column(nullable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant creatAt;
     @Column(nullable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    private Instant updadeAt;
+    private Instant updateAt;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "owner", nullable = false)
     private User owner;
 
-    @OneToMany(mappedBy = "shoppingList")
-    List<SharedList> sharedLists = new ArrayList<>();
+    @OneToOne(mappedBy = "shoppingList")
+    private SharedList shared;
 
 }
