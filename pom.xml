@@ -137,6 +137,7 @@
 <!--						</path>-->
 						<!-- other annotation processors -->
 					</annotationProcessorPaths>
+					<compilerArgs>--enable-preview</compilerArgs>
 				</configuration>
 			</plugin>
 		</plugins>
