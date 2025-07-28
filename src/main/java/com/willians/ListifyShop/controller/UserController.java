@@ -19,7 +19,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN') or #id.equals(authentication.principal.claims['id'])")
+//    @PreAuthorize("hasAuthority('SCOPE_ADMIN') or #id.equals(authentication.principal.claims['id'])")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN') or @authorizationService.isSelf(authentication, #id)")
     public ResponseEntity<UserResponseDto> findUserById(@PathVariable String id, JwtAuthenticationToken token){
         System.out.println(token.getTokenAttributes());
         System.out.println(token.getToken());
